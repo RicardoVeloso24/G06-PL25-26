@@ -1,0 +1,9 @@
+PROGRAM LOGIC_IF
+INTEGER A
+LOGICAL OK
+A = 3
+OK = .TRUE.
+IF (A .GT. 0 .AND. OK) THEN
+PRINT *, 'Condition true'
+ENDIF
+END
