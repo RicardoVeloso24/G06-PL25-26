@@ -68,20 +68,22 @@ def print_errors(errors):
         print(err)
 
 
-def main():
-    args = parse_args()
+# def main():  
+#     args = parse_args()
+#     print (read_source(args.source_file))
+#     try:
+#         source_code, source_name = read_source(args.source_file)
+        
+#     except (FileNotFoundError, ValueError) as exc:
+#         print(exc)
+#         raise SystemExit(1)
 
-    try:
-        source_code, source_name = read_source(args.source_file)
-    except (FileNotFoundError, ValueError) as exc:
-        print(exc)
-        raise SystemExit(1)
+#     print(f"Fonte: {source_name}")
+#     tokens, errors = run_lexer(source_code)
 
-    print(f"Fonte: {source_name}")
-    tokens, errors = run_lexer(source_code)
-    print_tokens(tokens)
-    print_errors(errors)
+#     print_tokens(tokens)
+#     print_errors(errors)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

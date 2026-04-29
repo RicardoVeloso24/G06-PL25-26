@@ -14,7 +14,11 @@ KEYWORDS = {
     "continue": "CONTINUE",
     "goto": "GOTO",
     "read": "READ",
+    "write": "WRITE",
     "print": "PRINT",
+    "function": "FUNCTION",
+    "subroutine": "SUBROUTINE",
+    "return": "RETURN"
 }
 
 tokens = list(KEYWORDS.values()) + [
@@ -51,6 +55,7 @@ t_ASSIGN = r"="
 t_LPAREN = r"\("
 t_RPAREN = r"\)"
 t_COMMA = r","
+
 
 t_ignore = " \t\r"
 
