@@ -87,7 +87,7 @@ def main():
         sys.exit(1)
 
     print(vm_code)
-    print("Compilacao concluida com sucesso.")
+    print("Compilacao concluida com sucesso.", file=sys.stderr)
 
 
 if __name__ == "__main__":
