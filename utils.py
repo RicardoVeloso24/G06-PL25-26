@@ -1,4 +1,4 @@
-DEBUG_ENABLED = True
+DEBUG_ENABLED = False
 
 def debug_print(message):
     if DEBUG_ENABLED:
