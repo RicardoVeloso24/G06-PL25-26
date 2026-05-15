@@ -33,9 +33,15 @@ Compilador em Python para um subconjunto de Fortran 77, seguindo a pipeline clas
 * `READ *, ...`
 * `PRINT *, ...`
 
+Funcionalidade extra suportada:
+
+* `WRITE *, ...`, tratado como equivalente a `PRINT *, ...` para listas de saida
+
 ## Geracao de codigo
 
 O ficheiro `codegen.py` gera codigo textual final para uma VM de pilha simples, aproximada ao estilo da EWVM usada na cadeira.
+
+As instrucoes `PRINT` e `WRITE` do subconjunto suportado seguem o mesmo caminho interno e geram as mesmas instrucoes de escrita da VM.
 
 Instrucoes usadas:
 

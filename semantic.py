@@ -221,8 +221,8 @@ class SemanticAnalyzer:
         _, name, index_expr = expr
 
         index_type = self.visit_expression(index_expr)
-        if not self.is_numeric(index_type):
-            self.add_error(f"Indice do array '{name}' tem de ser numerico.")
+        if index_type != "INTEGER":
+            self.add_error(f"Indice do array '{name}' tem de ser INTEGER.")
 
         if name not in self.symbol_table:
             self.add_error(f"Variavel '{name}' nao declarada.")

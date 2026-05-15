@@ -86,6 +86,20 @@ END
         self.assertEqual(body["statements"][1][0], "print")
         self.assertEqual(len(body["statements"][1][1][1]), 3)
 
+    def test_parser_supports_write_as_extra_output_statement(self):
+        ast = parse_source(
+            """PROGRAM TEST
+INTEGER A
+WRITE *, 'A', A
+END
+"""
+        )
+
+        statement = ast[2]["statements"][0]
+        self.assertEqual(statement[0], "write")
+        self.assertEqual(statement[1][0], "list")
+        self.assertEqual(len(statement[1][1]), 2)
+
     def test_parser_keeps_array_reference(self):
         ast = parse_source(
             """PROGRAM TEST
@@ -249,7 +263,7 @@ END
 
         self.assertIn("Array 'A' usado sem indice.", analyzer.get_errors())
 
-    def test_array_index_must_be_numeric(self):
+    def test_array_index_must_be_integer(self):
         _, analyzer = analyze_source(
             """PROGRAM BAD
 INTEGER A(10)
@@ -260,7 +274,18 @@ END
 """
         )
 
-        self.assertIn("Indice do array 'A' tem de ser numerico.", analyzer.get_errors())
+        self.assertIn("Indice do array 'A' tem de ser INTEGER.", analyzer.get_errors())
+
+    def test_real_array_index_is_rejected(self):
+        _, analyzer = analyze_source(
+            """PROGRAM BAD
+INTEGER A(10)
+A(1.5) = 3
+END
+"""
+        )
+
+        self.assertIn("Indice do array 'A' tem de ser INTEGER.", analyzer.get_errors())
 
     def test_undeclared_array_is_reported(self):
         _, analyzer = analyze_source(
@@ -284,7 +309,7 @@ END
         )
 
         self.assertIn("Variavel 'I' nao declarada.", analyzer.get_errors())
-        self.assertIn("Indice do array 'A' tem de ser numerico.", analyzer.get_errors())
+        self.assertIn("Indice do array 'A' tem de ser INTEGER.", analyzer.get_errors())
 
 
 class CodegenTests(unittest.TestCase):
@@ -370,6 +395,24 @@ END
 
         self.assertIn('PUSHS "A"', vm_code)
         self.assertIn("PUSHG 0", vm_code)
+
+    def test_codegen_write_uses_output_path_like_print(self):
+        ast, analyzer = analyze_source(
+            """PROGRAM TEST
+INTEGER A
+A = 1
+WRITE *, 'A', A
+END
+"""
+        )
+
+        self.assertEqual(analyzer.get_errors(), [])
+        vm_code = generate_vm_code(ast, analyzer.get_symbol_table())
+
+        self.assertIn('PUSHS "A"', vm_code)
+        self.assertIn("WRITES", vm_code)
+        self.assertIn("PUSHG 0", vm_code)
+        self.assertIn("WRITEI", vm_code)
 
     def test_codegen_distinguishes_array_operations(self):
         ast, analyzer = analyze_source(
