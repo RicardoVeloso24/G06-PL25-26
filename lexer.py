@@ -16,9 +16,6 @@ KEYWORDS = {
     "read": "READ",
     "write": "WRITE",
     "print": "PRINT",
-    "function": "FUNCTION",
-    "subroutine": "SUBROUTINE",
-    "return": "RETURN"
 }
 
 tokens = list(KEYWORDS.values()) + [

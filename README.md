@@ -43,6 +43,8 @@ O ficheiro `codegen.py` gera codigo textual final para uma VM de pilha simples, 
 
 As instrucoes `PRINT` e `WRITE` do subconjunto suportado seguem o mesmo caminho interno e geram as mesmas instrucoes de escrita da VM.
 
+Valores `LOGICAL` sao representados no codigo gerado como inteiros `0` e `1`.
+
 Instrucoes usadas:
 
 * `PUSHN n`
@@ -69,6 +71,14 @@ Instrucoes usadas:
 As variaveis globais sao mapeadas para enderecos numericos. Arrays ocupam blocos contiguos de memoria global e usam acesso indireto simplificado com `PUSHGP`, `PADD`, `LOADN` e `STOREN`.
 
 Este output segue convencoes proximas da EWVM, mas nao foi validado contra um interpretador EWVM externo especifico.
+
+## Limitacoes assumidas
+
+* O codigo fonte e tratado em formato free-form.
+* A linguagem e case-insensitive; os identificadores sao normalizados internamente em maiusculas.
+* Nao ha suporte a fixed columns de Fortran 77.
+* Arrays simples sao suportados, mas nao ha bounds checking dos indices.
+* O backend gera codigo aproximado ao estilo da EWVM, mas nao foi validado externamente num interpretador EWVM oficial.
 
 ## Como executar
 
