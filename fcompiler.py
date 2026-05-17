@@ -66,12 +66,36 @@ def fortran_compiler(source_code):
         return None
 
 
+# def main():
+#     if len(sys.argv) != 2:
+#         print("Uso: python fcompiler.py <ficheiro.f>")
+#         sys.exit(1)
+
+#     src_file_path = sys.argv[1]
+
+#     if not os.path.exists(src_file_path):
+#         print(f"Erro: ficheiro '{src_file_path}' nao encontrado.")
+#         sys.exit(1)
+
+#     with open(src_file_path, "r", encoding="utf-8") as source_file:
+#         source_content = source_file.read()
+
+#     vm_code = fortran_compiler(source_content)
+
+#     if vm_code is None:
+#         print("Compilacao falhou.")
+#         sys.exit(1)
+
+#     print(vm_code)
+#     print("Compilacao concluida com sucesso.", file=sys.stderr)
+
 def main():
-    if len(sys.argv) != 2:
-        print("Uso: python fcompiler.py <ficheiro.f>")
+    if len(sys.argv) not in (2, 3):
+        print("Uso: python fcompiler.py <ficheiro.f> [ficheiro.vm]")
         sys.exit(1)
 
     src_file_path = sys.argv[1]
+    out_file_path = sys.argv[2] if len(sys.argv) == 3 else None
 
     if not os.path.exists(src_file_path):
         print(f"Erro: ficheiro '{src_file_path}' nao encontrado.")
@@ -86,7 +110,13 @@ def main():
         print("Compilacao falhou.")
         sys.exit(1)
 
-    print(vm_code)
+    if out_file_path:
+        with open(out_file_path, "w", encoding="utf-8", newline="\n") as vm_file:
+            vm_file.write(vm_code)
+            vm_file.write("\n")
+    else:
+        print(vm_code)
+
     print("Compilacao concluida com sucesso.", file=sys.stderr)
 
 

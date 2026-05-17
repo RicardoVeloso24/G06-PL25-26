@@ -26,9 +26,16 @@ class CodeGenerator:
     def emit_label(self, label):
         self.emit(f"{label}:")
 
+    # def new_label(self, prefix):
+    #     self.label_counter += 1
+    #     return f"{prefix}_{self.label_counter}"
+
+    def sanitize_label(self, label):
+        return "".join(ch for ch in str(label) if ch.isalnum())
+
     def new_label(self, prefix):
         self.label_counter += 1
-        return f"{prefix}_{self.label_counter}"
+        return f"{self.sanitize_label(prefix)}{self.label_counter}"
 
     def build_global_layout(self, declarations):
         next_address = 0
@@ -237,6 +244,15 @@ class CodeGenerator:
         escaped = value.replace('"', '\\"')
         self.emit(f'PUSHS "{escaped}"')
 
+    # def generate_array_address(self, name, index_expr):
+    #     self.emit("PUSHGP")
+    #     self.emit(f"PUSHI {self.global_address(name)}")
+    #     self.emit("PADD")
+    #     self.generate_expression(index_expr)
+    #     self.emit("PUSHI 1")
+    #     self.emit("SUB")
+    #     self.emit("PADD")
+
     def generate_array_address(self, name, index_expr):
         self.emit("PUSHGP")
         self.emit(f"PUSHI {self.global_address(name)}")
@@ -244,7 +260,6 @@ class CodeGenerator:
         self.generate_expression(index_expr)
         self.emit("PUSHI 1")
         self.emit("SUB")
-        self.emit("PADD")
 
     def emit_binary_operator(self, op):
         if op == ".NE.":
