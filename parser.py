@@ -189,6 +189,9 @@ def p_expression_group(p):
     "expression : LPAREN expression RPAREN"
     p[0] = p[2]
 
+def p_expression_function_call(p):
+    "expression : ID LPAREN expression COMMA expression RPAREN"
+    p[0] = ("function_call", p[1], [p[3], p[5]])
 
 def p_expression_variable(p):
     "expression : variable"

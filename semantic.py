@@ -177,6 +177,9 @@ class SemanticAnalyzer:
 
         if kind == "string":
             return "STRING"
+    
+        if kind == "function_call":
+            return self.visit_function_call(expr)
 
         if kind == "binop":
             _, op, left_expr, right_expr = expr
@@ -203,6 +206,26 @@ class SemanticAnalyzer:
             return "REAL"
 
         return "UNKNOWN"
+
+    def visit_function_call(self, expr):
+        _, name, args = expr
+
+        if name != "MOD":
+            self.add_error(f"Funcao '{name}' nao suportada.")
+            return "UNKNOWN"
+
+        if len(args) != 2:
+            self.add_error("Funcao MOD exige dois argumentos.")
+            return "UNKNOWN"
+
+        arg_types = [self.visit_expression(arg) for arg in args]
+
+        if any(arg_type != "INTEGER" for arg_type in arg_types):
+            self.add_error("Funcao MOD exige argumentos INTEGER.")
+            return "UNKNOWN"
+
+        return "INTEGER"
+
 
     def visit_variable(self, name):
         if name not in self.symbol_table:

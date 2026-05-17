@@ -213,6 +213,9 @@ class CodeGenerator:
         elif kind == "string":
             self.generate_string(expr[1])
 
+        elif kind == "function_call":
+            self.generate_function_call(expr)
+
         elif kind == "binop":
             _, op, left_expr, right_expr = expr
             self.generate_expression(left_expr)
@@ -226,6 +229,19 @@ class CodeGenerator:
 
         else:
             raise ValueError(f"Expressao nao suportada no codegen: {kind}")
+
+    def generate_function_call(self, expr):
+        _, name, args = expr
+
+        if name != "MOD":
+            raise ValueError(f"Funcao nao suportada no codegen: {name}")
+
+        if len(args) != 2:
+            raise ValueError("Funcao MOD exige dois argumentos.")
+
+        self.generate_expression(args[0])
+        self.generate_expression(args[1])
+        self.emit("MOD")
 
     def generate_leaf(self, value):
         if isinstance(value, bool):
@@ -333,6 +349,11 @@ class CodeGenerator:
 
         if kind == "array_ref":
             return self.symbol_type(expr[1])
+
+        if kind == "function_call":
+            if expr[1] == "MOD":
+                return "INTEGER"
+            return "UNKNOWN"
 
         if kind == "binop":
             op = expr[1]
